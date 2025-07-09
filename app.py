@@ -81,28 +81,38 @@ def add_entry():
     if request.method == 'POST':
         mood_score = int(request.form['mood_score'])
         notes = request.form.get('notes', '')
+        entry_date = datetime.strptime(request.form['entry_date'], '%Y-%m-%d').date()
         today = datetime.today().date()
 
-        existing_entry = MoodEntry.query.filter_by(user_id=current_user.id, date=today).first()
+        # Walidacja daty
+        if entry_date > today:
+            flash('Nie można dodawać wpisów z przyszłości!', 'error')
+            return redirect(url_for('add_entry'))
+
+        existing_entry = MoodEntry.query.filter_by(
+            user_id=current_user.id,
+            date=entry_date
+        ).first()
 
         if existing_entry:
             existing_entry.mood_score = mood_score
             existing_entry.notes = notes
+            message = 'Wpis został zaktualizowany!'
         else:
             new_entry = MoodEntry(
                 mood_score=mood_score,
                 notes=notes,
                 user_id=current_user.id,
-                date=today
+                date=entry_date
             )
             db.session.add(new_entry)
+            message = 'Wpis został dodany!'
 
         db.session.commit()
-        flash('Wpis został dodany!', 'success')
+        flash(message, 'success')
         return redirect(url_for('index'))
 
-    return render_template('add_entry.html')
-
+    return render_template('add_entry.html', datetime=datetime)
 
 @app.route('/calendar')
 @login_required
