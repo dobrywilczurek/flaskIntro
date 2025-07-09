@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="stats-page">
+    <h1>Statystyki nastroju</h1>
+
+    <div class="stats-container">
+        <div class="stat-box average-score">
+            <h2><i class="fas fa-chart-line"></i> Średni nastrój</h2>
+            <div class="score-container">
+                {% if average_score %}
+                    <div class="main-score">{{ "%.1f"|format(average_score) }}</div>
+                    <div class="max-score">/5</div>
+                {% else %}
+                    <p class="no-data">Brak danych</p>
+                {% endif %}
+            </div>
+            <p class="time-range">Ostatnie 7 dni</p>
+        </div>
+
+        {% if chart %}
+        <div class="stat-box chart-container">
+            <h2><i class="fas fa-chart-pie"></i> Rozkład nastroju</h2>
+            <div class="chart-img">
+                <img src="data:image/png;base64,{{ chart }}" alt="Wykres nastroju">
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

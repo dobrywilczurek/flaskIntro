@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="mood-entry-container">
+    <h1>Jak się dziś czujesz?</h1>
+
+    <form method="POST" class="mood-form">
+        <div class="form-group">
+            <div class="mood-display">
+                <span id="moodEmoji">😐</span>
+                <span id="moodValue">3</span>/5
+            </div>
+
+            <input type="range" id="mood_score" name="mood_score"
+                   min="1" max="5" value="3" class="mood-slider" required
+                   list="mood-markers">
+
+            <div class="mood-labels">
+                <span>😭</span>
+                <span>😞</span>
+                <span>😐</span>
+                <span>🙂</span>
+                <span>😁</span>
+            </div>
+
+            <div class="mood-description">
+                <small id="moodDescription">Neutralnie</small>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="notes">Dodaj notatkę (opcjonalnie):</label>
+            <textarea id="notes" name="notes" rows="3"
+                     placeholder="Co dziś wpłynęło na Twój nastrój?"></textarea>
+        </div>
+
+        <button type="submit" class="btn-save">
+            Zapisz
+        </button>
+    </form>
+</div>
+
+<script>
+    const slider = document.getElementById('mood_score');
+    const moodValue = document.getElementById('moodValue');
+    const moodEmoji = document.getElementById('moodEmoji');
+    const moodDescription = document.getElementById('moodDescription');
+
+    const emojis = ['😭', '😞', '😐', '🙂', '😁'];
+    const descriptions = [
+        'Bardzo źle',
+        'Źle',
+        'Neutralnie',
+        'Dobrze',
+        'Świetnie'
+    ];
+
+    slider.addEventListener('input', () => {
+        const value = slider.value - 1;
+        moodValue.textContent = slider.value;
+        moodEmoji.textContent = emojis[value];
+        moodDescription.textContent = descriptions[value];
+
+        // Zmiana koloru
+        const colors = ['#ff6b6b', '#feca57', '#f5f5f5', '#a1e8af', '#1dd1a1'];
+        moodEmoji.style.color = colors[value];
+    });
+</script>
+{% endblock %}

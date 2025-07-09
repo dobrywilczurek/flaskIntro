@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="header-section">
+        <div class="header-top">
+            <h1>Dziennik nastroju</h1>
+            <a href="{{ url_for('logout') }}" class="btn-logout">Wyloguj</a>
+        </div>
+        <div class="current-date">
+            {{ now.strftime("%A, %d %B %Y") }}
+        </div>
+    </div>
+
+    <div class="welcome-message">
+        <p>Witaj w swoim dzienniku nastroju!</p>
+    </div>
+
+    <div class="entry-container">
+        {% if today_entry %}
+            <div class="today-entry">
+                <h2>Twój dzisiejszy nastrój: <span class="mood-score">{{ today_entry.mood_score }}/5</span></h2>
+                {% if today_entry.notes %}
+                <div class="notes-box">
+                    <p>{{ today_entry.notes }}</p>
+                </div>
+                {% endif %}
+                <a href="{{ url_for('add_entry') }}" class="btn">Edytuj wpis</a>
+            </div>
+        {% else %}
+            <div class="no-entry">
+                <p>Dziś jeszcze nie dodałeś wpisu.</p>
+                <a href="{{ url_for('add_entry') }}" class="btn btn-primary">Dodaj wpis</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="quote-box">
+        <h3>Cytat na dziś:</h3>
+        <p class="quote-text">"{{ quote.text }}"</p>
+        <p class="quote-author">- {{ quote.author }}</p>
+    </div>
+</div>
+{% endblock %}
