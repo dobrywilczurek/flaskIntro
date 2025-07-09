@@ -3,6 +3,7 @@ from flask_login import LoginManager, login_user, login_required, logout_user, c
 from models import db, User, MoodEntry
 from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask import jsonify, make_response
 import matplotlib.pyplot as plt
 from io import BytesIO
 import base64
@@ -69,8 +70,9 @@ def index():
     ]
     today_quote = random.choice(quotes)
     today = datetime.today().date()
+    cookies_accepted = request.cookies.get('cookies_accepted', 'false') == 'true'
     today_entry = MoodEntry.query.filter_by(user_id=current_user.id, date=today).first()
-    return render_template('index.html', today_entry=today_entry, now=datetime.now(), quote = today_quote)
+    return render_template('index.html', today_entry=today_entry, now=datetime.now(), quote = today_quote,  cookies_accepted=cookies_accepted)
 
 
 @app.route('/add_entry', methods=['GET', 'POST'])
@@ -163,6 +165,30 @@ def show_stats():
         chart = None
 
     return render_template('stats.html', average_score=average_score,chart=chart)
+
+@app.route('/accept_cookies', methods=['POST'])
+def accept_cookies():
+    response = make_response(jsonify({'status': 'success'}))
+    expiry = datetime.now() + timedelta(days=365)
+    response.set_cookie(
+        'cookies_accepted',
+        'true',
+        expires=expiry,
+        httponly=True,
+        samesite='Lax',
+        secure=True  # Wymagane jeśli używasz HTTPS
+    )
+    return response
+
+@app.route('/reject_cookies', methods=['POST'])
+def reject_cookies():
+    response = make_response(jsonify({'status': 'success'}))
+    response.set_cookie(
+        'cookies_accepted',
+        'false',
+        expires=0  # Wygaśnięcie natychmiastowe
+    )
+    return response
 
 
 

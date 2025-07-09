@@ -1,0 +1,61 @@
+.cookie-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(40, 40, 40, 0.9);
+    color: white;
+    padding: 15px;
+    z-index: 1000;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+}
+
+.cookie-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 15px;
+}
+
+.cookie-content p {
+    margin: 0;
+    flex: 1;
+    min-width: 300px;
+    font-size: 14px;
+}
+
+.cookie-content a {
+    color: #3498db;
+    text-decoration: underline;
+}
+
+.cookie-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-cookie {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.btn-cookie.accept {
+    background: #2ecc71;
+    color: white;
+}
+
+.btn-cookie.reject {
+    background: transparent;
+    color: #eee;
+    border: 1px solid #eee;
+}
+
+.btn-cookie:hover {
+    transform: translateY(-2px);
+}
